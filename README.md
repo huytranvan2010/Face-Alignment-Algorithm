@@ -157,6 +157,6 @@ Chi tiết implementation các bạn có thể xem tại [github-huytranvan2010]
 ### Kết luận
 Như vậy chúng ta đã cùng tìm hiểu cách thực hiện face alignment dựa trên vị trí của hai mắt. Ở đây mình giới thiệu một cách tổng quát nhất, các bạn có thể tùy biến một số bước. Ví dụ ở bước xác định vị trí khuôn mặt có thể dùng **facial landmarks**, ở bước phát hiện khuôn mặt có thể dùng phương pháp khác. Trong bài sau mình sẽ giới thiệu một số packages thực hiện việc này. Điều quan trọng là chúng ta cần hiểu được cách thức nó hoạt động. 
 
-http://datahacker.rs/010-how-to-align-faces-with-opencv-in-python/
-
-https://sefiks.com/2020/02/23/face-alignment-for-face-recognition-in-python-within-opencv/ 
+### Tài liệu tham khảo
+1. http://datahacker.rs/010-how-to-align-faces-with-opencv-in-python/
+2. https://sefiks.com/2020/02/23/face-alignment-for-face-recognition-in-python-within-opencv/ 
