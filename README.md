@@ -1,6 +1,6 @@
 # Face-Alignment
 ### Hướng dẫn
-Cây thư mục của project:
+Cây thư mục của project [linkgithub](https://github.com/huytranvan2010/Face-Alignment-Algorithm):
 ```python
 .
 ├── algorithm_face_alignment.py
@@ -17,11 +17,13 @@ Cây thư mục của project:
 │   ├── line2.png
 │   ├── rotated1.png
 │   └── rotated2.png
-└── README.md
+├── README.md
+└── requirements.txt
 ```
-* **Cascades** chứa face và eye haar cascades
+* **cascades** chứa face và eye haar cascades
 * **images** chứa ảnh để test: trong này có chứa 2 ảnh, một ảnh mắt trái thấp hơn, một ảnh mắt trái cao hơn để test cả 2 trường hợp xoay khác chiều
-* **ouput** chứa các ảnh đầu ra trong quá trình chạy để mình họa
+* **ouput** chứa các ảnh đầu ra trong quá trình chạy để minh họa
+* `requirements.txt` chứa các thư viện
 * `algorithm_face_alignment.py` chính là file chạy
 
 Bạn có thể chạy với cú pháp
@@ -33,7 +35,7 @@ hoặc là
 python algorithm_face_alignment.py --face cascades/haarcascade_frontalface_default.xml --eye cascades/haarcascade_eye.xml --image images/boy2.jpg
 ```
 ### Nội dung
-Face alignment là quá trình sắp đặt khuôn mặt sao cho nó thẳng đứng trong ảnh. Face alignment thường được thực hiện như bước tiền xử lý cho các thuật toán nhận diện khuôn mặt. Để thực hiện việc này cần trải qua 2 bước:
+Face alignment là quá trình sắp xếp khuôn mặt sao cho nó thẳng đứng trong ảnh. Face alignment thường được thực hiện như bước tiền xử lý cho các thuật toán nhận diện khuôn mặt. Để thực hiện việc này cần trải qua 2 bước:
 * Xác định cấu trúc hình học của khuôn mặt trong ảnh
 * Thực hiện face alignment thông qua các pháp biến đổi như translation (dịch chuyển), scale, rotation.
 
@@ -47,6 +49,7 @@ Dưới đây là các bước thực hiện face alignment:
 * Scale ảnh
 
 Chúng ta cùng đi vào các bước cụ thể.
+
 **Bước 1 - Phát hiện khuôn mặt và mắt trong ảnh**
 Có rất nhiều phương pháp để phát hiện khuôn mặt như Haar cascades, Single Shot Multibox Detector (SSD) trong OpenCV dưới dạng pre-trained model, Dlib có HOG và CNN (hay còn gọi là Max-Margin Object Detection MMOD). Ngoài ra còn phải kể đến MTCNN (multi-task Cascaded Convolutional Networks) và RetinaFace là những mô hình rất tiên tiến để phát hiện khuôn mặt. Để đơn giản trong này này chúng ta sẽ sử dụng **Haar Cascades**.
 
@@ -78,6 +81,7 @@ cv2.rectangle(face_ROI_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
 <img src="output/eyes.png" style="display:block; margin-left:auto; margin-right:auto">
 
 **Bước 2 - Xác định tâm của hai mắt, vẽ đường nối hai tâm**
+
 Đầu tiên sẽ xác định mắt nào là mắt trái, mắt nào là mắt phải (đứng từ phía người dùng) dựa trên tọa độ x của hai bounding box quanh mắt
 ```python
 if eye_1[0] < eye_2[0]:     # tọa độ x nhỏ hơn là mắt bên trái (từ phía người quan sát)
@@ -99,9 +103,9 @@ cv2.line(face_ROI_color, center_left_eye, center_right_eye, (0, 220, 220), 2)
 <img src="output/line1.png" style="display:block; margin-left:auto; margin-right:auto">
 
 **Bước 3 - Vẽ đường nằm ngang giữa hai mắt, tính góc xoay ảnh**
-> Quy ước: Đường nằm ngang là đường được đi qua tâm của mắt nằm bên dưới (có tọa độ y lớn hơn)
+> Quy ước: Đường nằm ngang là đường đi qua tâm của mắt nằm bên dưới (có tọa độ y lớn hơn)
 
-Xác định tâm mắt bên nào nằm bên dưới dựa vào tọa độ y của tâm mắt, đồng thời vẽ điểm A để phục vụ cho việc tính góc xoay. Ở đây cần chú ý cả chiều xoay:
+Xác định tâm mắt bên nào nằm dưới dựa vào tọa độ y, đồng thời vẽ điểm A để phục vụ cho việc tính góc xoay. Ở đây cần chú ý cả chiều xoay:
 * Nếu mắt trái (nhìn từ phía người dùng) thấp hơn mắt phải, chúng ta sẽ phải xoay ảnh theo chiều kim đồng hồ
 * nếu mắt phải (nhìn từ phía người dùng) thấp hơn mắt trái, chúng ta phải xoay ảnh theo chiều ngược kim đồng hồ
 ```python
@@ -145,7 +149,13 @@ rotated_face_ROI = cv2.warpAffine(face_ROI_color, M, (w, h))    # có thể dùn
 ```
 
 Ảnh sau khi đã được xoay căn chỉnh
+
 <img src="output/rotated1.png" style="display:block; margin-left:auto; margin-right:auto">
+
+Chi tiết implementation các bạn có thể xem tại [github-huytranvan2010](https://github.com/huytranvan2010/Face-Alignment-Algorithm). Nếu thấy hay hãy để lại cho mình 1 sao nhé.
+
+### Kết luận
+Như vậy chúng ta đã cùng tìm hiểu cách thực hiện face alignment dựa trên vị trí của hai mắt. Ở đây mình giới thiệu một cách tổng quát nhất, các bạn có thể tùy biến một số bước. Ví dụ ở bước xác định vị trí khuôn mặt có thể dùng **facial landmarks**, ở bước phát hiện khuôn mặt có thể dùng phương pháp khác. Trong bài sau mình sẽ giới thiệu một số packages thực hiện việc này. Điều quan trọng là chúng ta cần hiểu được cách thức nó hoạt động. 
 
 http://datahacker.rs/010-how-to-align-faces-with-opencv-in-python/
 
