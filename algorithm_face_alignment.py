@@ -22,7 +22,7 @@ cv2.imshow("original", image)
 cv2.waitKey(0)
 
 """ Phát hiện khuôn mặt, trả về list of tuples (x, y, w, h) các khuôn mặt nếu có """
-rects_face = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(30, 30))
+rects_face = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(30, 30))     # scaleFactor kích thước ảnh bị giảm bn lần mỗi lần image scale
 # Vẽ rectangle quang khuôn mặt
 for (x, y, w, h) in rects_face:
     cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 1)
@@ -60,6 +60,7 @@ else:
     right_eye = eye_1
 
 """ Xác định tâm hai mắt và vẽ đường thẳng qua đó """
+# chú ý rect ở dạng (x, y, w, h)
 center_left_eye = (int(left_eye[0] + left_eye[2] / 2), int(left_eye[1] + left_eye[3] / 2))
 (x_left_eye, y_left_eye) = center_left_eye
 
@@ -109,13 +110,13 @@ print(direction)
 # Tâm của face ROI
 (h, w) = face_ROI_color.shape[:2]
 center = (w // 2, h // 2)
-M = cv2.getRotationMatrix2D(center, angle, 1.0)
+M = cv2.getRotationMatrix2D(center, angle, 1)
 rotated_face_ROI = cv2.warpAffine(face_ROI_color, M, (w, h))    # có thể dùng thư viện imutils cho nhanh
 
 cv2.imshow("rotated", rotated_face_ROI)
 cv2.waitKey(0)
 
-
+""" Chúng ta xoay ảnh trên ảnh gốc """
 (h, w) = original.shape[:2]
 center = (w // 2, h // 2)
 M = cv2.getRotationMatrix2D(center, angle, 1.0)
